@@ -17,10 +17,6 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     @IBOutlet weak var stopRecordingButton: UIButton!
     
     var audioRecorder: AVAudioRecorder!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,7 +62,9 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         if flag {
             performSegue(withIdentifier: "stopRecording", sender: audioRecorder.url)
         } else {
-            print("Recording failed")
+            
+            // Present an AlertView when the recording failed
+            present(AlertView.alertViews(title: "Recording Failed", message: "Please try again"), animated: true, completion: nil)
         }
     }
     
@@ -85,16 +83,9 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     // Configure the UI regarding wether the user is recording or not
     func configureUI(isRecording recording: Bool) {
         
-        if recording {
-            stopRecordingButton.isEnabled = true
-            recordButton.isEnabled = false
-            recordingLabel.text = "Recording in process"
-            
-        } else {
-            stopRecordingButton.isEnabled = false
-            recordButton.isEnabled = true
-            recordingLabel.text = "Tap to record"
-        }
+        stopRecordingButton.isEnabled = recording
+        recordButton.isEnabled = !recording
+        recordingLabel.text = recording ? "Recording in process" : "Tap to record"
     }
     
 }
